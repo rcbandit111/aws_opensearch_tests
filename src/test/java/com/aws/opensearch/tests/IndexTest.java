@@ -3,6 +3,7 @@ package com.aws.opensearch.tests;
 import com.aws.opensearch.tests.dto.BaseIndexDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.opensearch.client.json.JsonData;
 import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch._types.Result;
 import org.opensearch.client.opensearch._types.mapping.TypeMapping;
@@ -20,6 +21,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
 
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,10 +69,10 @@ public class IndexTest {
     @Order(1)
     public void createIndexTest() {
 
-        Map<String, Object> document = new HashMap<>();
-        document.put("test", "test_value");
+        Map<String, Object> mappings = new HashMap<>();
+        mappings.put("test_mapping", "test_value");
 
-        createIndex(document, "test");
+        createIndex(mappings, "test");
     }
 
     /**
@@ -106,14 +108,15 @@ public class IndexTest {
 
     private void createIndex(Map<String, Object> indexMapping, String indexName) {
         try {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            String mappingJson = objectMapper.writeValueAsString(indexMapping);
-//
-//            TypeMapping typeMapping = objectMapper.readValue(mappingJson, TypeMapping.class);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(indexMapping);
 
             CreateIndexRequest request = new CreateIndexRequest.Builder()
                     .index(indexName)
-//                    .mappings(typeMapping)
+                    .mappings(m -> m
+                            .withJson(new StringReader(json))
+                    )
                     .build();
 
             CreateIndexResponse createIndexResponse = client.indices().create(request);
