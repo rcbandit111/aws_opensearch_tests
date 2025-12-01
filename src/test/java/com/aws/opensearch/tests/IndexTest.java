@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ConnectionTest {
+public class IndexTest {
 
-  static final Logger LOGGER = LoggerFactory.getLogger(ConnectionTest.class);
+  static final Logger LOGGER = LoggerFactory.getLogger(IndexTest.class);
 
   private OpenSearchClient client;
 
