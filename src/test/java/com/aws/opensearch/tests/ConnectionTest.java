@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ConnectionTest {
 
@@ -31,10 +32,10 @@ public class ConnectionTest {
 
   private OpenSearchClient client;
 
-  private final String clusterUrl = System.getenv("CLUSTERURL");;
-  private final String accessKey = System.getenv("ACCESSKEY");;
-  private final String secretKey = System.getenv("SECRETKEY");;
-  private final String region = System.getenv("REGION");;
+  private final String clusterUrl = System.getenv("CLUSTERURL");
+  private final String accessKey = System.getenv("ACCESSKEY");
+  private final String secretKey = System.getenv("SECRETKEY");
+  private final String region = System.getenv("REGION");
 
   @BeforeAll
   public void awsConnection() throws Exception {
@@ -59,9 +60,10 @@ public class ConnectionTest {
   }
 
     /**
-     * Insert a document in OpenSearch index.
+     * Create an Index with mapping definitions
      */
     @Test
+    @Order(1)
     public void createIndexTest() {
 
         Map<String, Object> document = new HashMap<>();
@@ -70,7 +72,11 @@ public class ConnectionTest {
         createIndex(document, "test");
     }
 
+    /**
+     * Insert a document in OpenSearch index.
+     */
     @Test
+    @Order(2)
     public void createDocumentTest() {
 
         BaseIndexDto baseIndexDto = new BaseIndexDto();
@@ -85,11 +91,17 @@ public class ConnectionTest {
         assertNotNull(id);
     }
 
+    /**
+     * Drop Index
+     */
     @Test
+    @Order(3)
     public void dropIndexTest() {
 
         dropIndex("test");
     }
+
+    // Utility methods
 
     private void createIndex(Map<String, Object> indexMapping, String indexName) {
         try {
