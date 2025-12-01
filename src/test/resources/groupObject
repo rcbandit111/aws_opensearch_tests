@@ -1,0 +1,36 @@
+{
+    "clientId": "1263434",
+    "record": {
+        "id": "88749b1f-4946-4033-b9a8-2b99bf1205ff",
+        "type": "CLIENT",
+        "clientAccounts": [
+            {
+                "groupId": "88749b1f-4946-4033-b9a8-2b99bf1205ff",
+                "id": "c22cfb6d-1946-4c49-814b-f9309b22bf97",
+                "creationDate": {
+                    "month": "02",
+                    "year": "2018",
+                    "day": "05"
+                },
+                "internalAccounts": [
+                    {
+                        "id": "bd8fd4b4-194d-4bcb-ad69-266800d497b5",
+                        "status": {
+                            "code": "Disabled"
+                        }
+                        "creationDate": {
+                            "day": "05",
+                            "month": "02",
+                            "year": "2018"
+                        }
+                    }
+                ],
+                "status": "DISABLED",
+                "internalAccountIds": [
+                    "bd8fd4b4-194d-4bcb-ad69-266800d497b5"
+                ]
+                "name": "Client Inc."
+            }
+        ]
+    }
+}

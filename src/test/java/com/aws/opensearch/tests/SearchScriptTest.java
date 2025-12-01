@@ -1,9 +1,13 @@
 package com.aws.opensearch.tests;
 
+import com.aws.opensearch.tests.dto.SearchRequestDto;
 import org.junit.jupiter.api.*;
 import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.client.opensearch._types.SortOptions;
+import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch.core.SearchRequest;
 import org.opensearch.client.opensearch.core.SearchResponse;
+import org.opensearch.client.opensearch.core.search.SourceConfig;
 import org.opensearch.client.transport.aws.AwsSdk2Transport;
 import org.opensearch.client.transport.aws.AwsSdk2TransportOptions;
 import org.slf4j.Logger;
@@ -17,7 +21,9 @@ import software.amazon.awssdk.regions.Region;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SearchScriptTest {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(IndexTest.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(SearchScriptTest.class);
+
+    private final String indexName = "test";
 
     private OpenSearchClient client;
 
@@ -55,6 +61,7 @@ public class SearchScriptTest {
     @Order(1)
     public void searchScriptTest() {
 
+        // TODO - call here the search script and pass some data
     }
 
     public <T> SearchResponse<T> search(SearchRequest.Builder requestBuilder, Class<T> clazz) {
@@ -65,6 +72,36 @@ public class SearchScriptTest {
             LOGGER.error("Search operation failed.", exception);
             throw new RuntimeException(exception);
         }
+    }
+
+    private SearchResponse search(SearchRequestDto requestDto, BoolQuery esQuery,
+                                  SortOptions sortQueryBuilder) {
+        final SearchRequest.Builder searchRequestBuilder = getBaseSearchRequestBuilder(requestDto);
+        searchRequestBuilder.query(esQuery.toQuery());
+        searchRequestBuilder.sort(sortQueryBuilder);
+        searchRequestBuilder.source(SourceConfig.of(s -> s
+                .filter(f -> f
+                        .includes(requestDto.getResponseFields())
+                )
+        ));
+
+        LOGGER.info("Search Query string {}", searchRequestBuilder);
+        SearchResponse searchResponse;
+
+        try {
+            searchResponse = search(searchRequestBuilder, Object.class);
+        } catch (Exception ex) {
+            LOGGER.info("Error getting search response for request {}", requestDto, ex);
+            throw ex;
+        }
+        return searchResponse;
+    }
+
+    private SearchRequest.Builder getBaseSearchRequestBuilder(SearchRequestDto requestDto) {
+        return new SearchRequest.Builder()
+                .index(indexName)
+                .from(requestDto.getOffset())
+                .size(requestDto.getLimit());
     }
 
 }
