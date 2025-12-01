@@ -1,5 +1,6 @@
 package com.aws.opensearch.tests;
 
+import com.aws.opensearch.tests.dto.BaseIndexDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.opensearch.client.opensearch.OpenSearchClient;

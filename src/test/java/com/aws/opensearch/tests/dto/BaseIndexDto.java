@@ -1,4 +1,4 @@
-package com.aws.opensearch.tests;
+package com.aws.opensearch.tests.dto;
 
 import java.util.Map;
 
