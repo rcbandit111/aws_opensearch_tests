@@ -106,14 +106,14 @@ public class IndexTest {
 
     private void createIndex(Map<String, Object> indexMapping, String indexName) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String mappingJson = objectMapper.writeValueAsString(indexMapping);
-
-            TypeMapping typeMapping = objectMapper.readValue(mappingJson, TypeMapping.class);
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String mappingJson = objectMapper.writeValueAsString(indexMapping);
+//
+//            TypeMapping typeMapping = objectMapper.readValue(mappingJson, TypeMapping.class);
 
             CreateIndexRequest request = new CreateIndexRequest.Builder()
                     .index(indexName)
-                    .mappings(typeMapping)
+//                    .mappings(typeMapping)
                     .build();
 
             CreateIndexResponse createIndexResponse = client.indices().create(request);
